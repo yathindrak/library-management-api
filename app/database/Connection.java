@@ -30,9 +30,9 @@ public class Connection {
         MongoClientOptions.Builder options = MongoClientOptions.builder();
         options.socketKeepAlive(true);
 
-        MongoClientURI uri = new MongoClientURI("mongodb://trevis-db:trevis123@ds227740.mlab.com:27740/trevis-db", options);
+        MongoClientURI uri = new MongoClientURI("mongodb://librarymgt:librarymgt1@ds137913.mlab.com:37913/librarymgt", options);
 
-        datastore = morphia.createDatastore(new MongoClient(uri), "trevis-db");
+        datastore = morphia.createDatastore(new MongoClient(uri), "librarymgt");
 
     }
 }

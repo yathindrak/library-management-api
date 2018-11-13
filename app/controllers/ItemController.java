@@ -1,21 +1,19 @@
 package controllers;
 
+import com.google.inject.Inject;
 import models.Book;
-import models.Item;
 import org.mongodb.morphia.Key;
 import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.*;
-import com.google.inject.Inject;
+import play.mvc.Controller;
+import play.mvc.Result;
 import repository.IItemRepository;
+import play.libs.Json;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-/**
- * This controller contains an action to handle HTTP requests
- * to the application's home page.
- */
-public class HomeController extends Controller {
+public class ItemController  extends Controller {
 
     @Inject
     private IItemRepository item;
@@ -23,7 +21,7 @@ public class HomeController extends Controller {
     private HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public HomeController(HttpExecutionContext ec) {
+    public ItemController(HttpExecutionContext ec) {
         this.httpExecutionContext = ec;
     }
 
@@ -49,22 +47,36 @@ public class HomeController extends Controller {
 //        return ok("insert item success");
 //    }
 
-
-//    public CompletionStage<Result> index() {
-//        // Use a different task with explicit EC
-//        return calculateResponse().thenApplyAsync(answer -> {
+    public Result getAll() {
+        // Use a different task with explicit EC
+//        return retrieveItemsResponse().thenApplyAsync(items -> {
 //            // uses Http.Context
 ////            ctx().flash().put("info", "Response updated!");
-//            return ok("answer was " + answer);
+//            return ok(String.valueOf(items));
 //        }, httpExecutionContext.current());
-//    }
-//
-//    private CompletableFuture<Key<Item>> calculateResponse() {
-//        Item it = new Book();
-//        it.setName("iu");
-//        ((Book) it).setAuthor("hh");
-//        Key<Item> i =  item.save(it);
-//        return CompletableFuture.completedFuture(i);
-//    }
+        List<Book> items = item.findAll();
+        return ok(Json.toJson(items));
+    }
+
+    private CompletableFuture<List<Book>> retrieveItemsResponse() {
+        List<Book> items =  item.findAll();
+//        Key<Item> i =  item.save(new Book(null, "awesome item", "awesome author"));
+        return CompletableFuture.completedFuture(items);
+    }
+
+    public CompletionStage<Result> save() {
+        // Use a different task with explicit EC
+        return retrieveSaveResponse().thenApplyAsync(answer -> {
+            // uses Http.Context
+//            ctx().flash().put("info", "Response updated!");
+            return ok(String.valueOf(answer));
+        }, httpExecutionContext.current());
+    }
+
+    private CompletableFuture<Key<Book>> retrieveSaveResponse() {
+        Book it = new Book(null, "ui", "i");
+        Key<Book> i =  item.save(it);
+        return CompletableFuture.completedFuture(i);
+    }
 
 }
