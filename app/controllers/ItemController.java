@@ -8,6 +8,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import repository.IItemRepository;
 import play.libs.Json;
+import utils.DateTime;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -54,6 +55,13 @@ public class ItemController  extends Controller {
 ////            ctx().flash().put("info", "Response updated!");
 //            return ok(String.valueOf(items));
 //        }, httpExecutionContext.current());
+
+        DateTime dateTime = new DateTime(2010,2,8);
+        DateTime dateTime1 = new DateTime(2010,2,9);
+
+        System.out.println(dateTime.compareTo(dateTime1));
+        System.out.println(dateTime);
+
         List<Book> items = item.findAll();
         return ok(Json.toJson(items));
     }

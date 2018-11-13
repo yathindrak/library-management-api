@@ -7,18 +7,24 @@ import org.mongodb.morphia.annotations.Id;
 public abstract class Item {
     @Id
     private ObjectId id;
-    private String name;
+    private String isbn;
+    private String title;
+    private String sector;
+//    private DateTime publicationDate;
+//    private DateTime borrowedDate;
+//    private Reader currentReader;
+
 
     @JsonCreator
     public Item() {
         this.id = null;
-        this.name = null;
+        this.title = null;
     }
 
     @JsonCreator
-    public Item(ObjectId id, String name) {
+    public Item(ObjectId id, String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     public ObjectId getId() {
@@ -27,13 +33,5 @@ public abstract class Item {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
