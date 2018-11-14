@@ -7,7 +7,7 @@ import utils.DateTime;
 
 public abstract class Item {
     @Id
-    private ObjectId id;
+    private String _id;
     private String isbn;
     private String title;
     private String sector;
@@ -27,9 +27,9 @@ public abstract class Item {
 //        this.currentReader = null;
 //    }
 
-    public Item(ObjectId id, String isbn, String title, String sector, DateTime publicationDate,
+    public Item(String id, String isbn, String title, String sector, DateTime publicationDate,
                 DateTime borrowedDate, Reader currentReader) {
-        this.id = id;
+        this._id = id;
         this.isbn = isbn;
         this.title = title;
         this.sector = sector;
@@ -38,12 +38,12 @@ public abstract class Item {
         this.currentReader = currentReader;
     }
 
-    public ObjectId getId() {
-        return id;
+    public String getId() {
+        return _id;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
+    public void setId(String id) {
+        this._id = id;
     }
 
     public String getIsbn() {

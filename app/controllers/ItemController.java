@@ -65,7 +65,7 @@ public class ItemController  extends Controller {
         }
 
         Key<Reader> returnedReader = readerRepo.save(reader);
-        deserializedDVD.getCurrentReader().setId(new ObjectId(String.valueOf(returnedReader.getId())));
+        deserializedDVD.getCurrentReader().setId(String.valueOf(returnedReader.getId()));
 
         dvdRepo.save(deserializedDVD);
         return ok("insert dvdRepo success");
@@ -83,10 +83,10 @@ public class ItemController  extends Controller {
         Author author = deserializedBook.getAuthor();
 
         Key<Reader> returnedReader = readerRepo.save(reader);
-        deserializedBook.getCurrentReader().setId(new ObjectId(String.valueOf(returnedReader.getId())));
+        deserializedBook.getCurrentReader().setId(String.valueOf(returnedReader.getId()));
 
         Key<Author> returnedAuthor = authorRepo.save(author);
-        deserializedBook.getAuthor().setId(new ObjectId(String.valueOf(returnedAuthor.getId())));
+        deserializedBook.getAuthor().setId(String.valueOf(returnedAuthor.getId()));
 
         Key<Book> returned = bookRepo.save(deserializedBook);
         return ok(String.valueOf(returned.getId()));

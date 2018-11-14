@@ -10,17 +10,13 @@ import utils.DateTime;
 public class Book extends Item {
     private Author author;
 
-//    public Book() {
-//        this.author = null;
-//    }
-
     public Book() {
         super(null, null, null, null, null, null, null);
         this.author = null;
     }
 
     @JsonCreator
-    public Book(@JsonProperty("id") ObjectId id, @JsonProperty("isbn") String isbn,
+    public Book(@JsonProperty("id") String id, @JsonProperty("isbn") String isbn,
                 @JsonProperty("title") String title, @JsonProperty("sector") String sector,
                 @JsonProperty("publicationDate") DateTime publicationDate,
                 @JsonProperty("borrowedDate") DateTime borrowedDate,

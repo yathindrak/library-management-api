@@ -24,7 +24,7 @@ public class DVD extends Item {
     }
 
     @JsonCreator
-    public DVD(@JsonProperty("id") ObjectId id, @JsonProperty("isbn") String isbn,
+    public DVD(@JsonProperty("id") String id, @JsonProperty("isbn") String isbn,
                @JsonProperty("title") String title, @JsonProperty("sector") String sector,
                @JsonProperty("publicationDate") DateTime publicationDate,
                @JsonProperty("borrowedDate") DateTime borrowedDate,
