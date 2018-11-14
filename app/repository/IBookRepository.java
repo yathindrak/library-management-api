@@ -2,14 +2,13 @@ package repository;
 
 import com.google.inject.ImplementedBy;
 import models.Book;
-import models.Item;
 import org.mongodb.morphia.Key;
-import repository.implementation.ItemRepositoryImpl;
+import repository.implementation.BookRepositoryImpl;
 
 import java.util.List;
 
-@ImplementedBy(ItemRepositoryImpl.class)
-public interface IItemRepository {
+@ImplementedBy(BookRepositoryImpl.class)
+public interface IBookRepository {
     Key<Book> save(Book item);
 
     List<Book> findAll();

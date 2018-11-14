@@ -5,9 +5,9 @@ import models.DVD;
 import org.mongodb.morphia.Key;
 
 import java.util.List;
-import repository.implementation.IDVDRepositoryImpl;
+import repository.implementation.DVDRepositoryImpl;
 
-@ImplementedBy(IDVDRepositoryImpl.class)
+@ImplementedBy(DVDRepositoryImpl.class)
 public interface IDVDRepository {
     Key<DVD> save(DVD item);
 

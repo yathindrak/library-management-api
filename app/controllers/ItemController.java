@@ -1,17 +1,20 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
-import models.Book;
-import models.DVD;
-import models.Item;
+import models.*;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Key;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
+import repository.IAuthorRepository;
 import repository.IDVDRepository;
-import repository.IItemRepository;
+import repository.IBookRepository;
 import play.libs.Json;
+import repository.IReaderRepository;
 import utils.DateTime;
+import utils.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +24,16 @@ import java.util.concurrent.CompletionStage;
 public class ItemController  extends Controller {
 
     @Inject
-    private IItemRepository item;
+    private IBookRepository book;
 
     @Inject
     private IDVDRepository dvd;
+
+    @Inject
+    private IReaderRepository reader;
+
+    @Inject
+    private IAuthorRepository authorRepo;
 
     private HttpExecutionContext httpExecutionContext;
 
@@ -33,102 +42,46 @@ public class ItemController  extends Controller {
         this.httpExecutionContext = ec;
     }
 
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
-
-//    public CompletionStage<Result> index() {
-//        // Use a different task with explicit EC
-//        return saveBook().thenApplyAsync()
-//    }
-//
-//    private CompletionStage<String> saveBook() {
-//        return CompletableFuture.completedFuture(item.save(new Book(null, "awesome item", "awesome author")));
-//    }
-//    public Result index() {
-////        List<Item> items =  item.findAll();
-////        return ok(Json.toJson(items));
-//        item.save(new Book(null, "awesome item", "awesome author"));
-//        return ok("insert item success");
-//    }
-
     public Result getAll() {
-        // Use a different task with explicit EC
-//        return retrieveItemsResponse().thenApplyAsync(items -> {
-//            // uses Http.Context
-////            ctx().flash().put("info", "Response updated!");
-//            return ok(String.valueOf(items));
-//        }, httpExecutionContext.current());
-
-        DateTime dateTime = new DateTime(2010,2,8);
-        DateTime dateTime1 = new DateTime(2010,2,9);
-
-        System.out.println(dateTime.compareTo(dateTime1));
-        System.out.println(dateTime);
-
         List<Item> itemList = new ArrayList<>();
-//        retrieveItemsResponse().thenApplyAsync(answer -> {
-//            List<Book> books = answer;
-//            itemList.addAll(books);
-//            return retrieveDvdsResponse().thenApplyAsync(ans -> {
-//                List<DVD> dvds = ans;
-//                itemList.addAll(dvds);
-//                return ok(Json.toJson(ans));
-//            }, httpExecutionContext.current());
-//        }, httpExecutionContext.current());
-
-
-
-        List<DVD> dvdz = dvd.findAll();
-        List<Book> items = item.findAll();
-        itemList.addAll(dvdz);
+        List<DVD> dvds = dvd.findAll();
+        List<Book> items = book.findAll();
+        itemList.addAll(dvds);
         itemList.addAll(items);
         return ok(Json.toJson(itemList));
     }
 
-    private CompletableFuture<List<Book>> retrieveItemsResponse() {
-        List<Book> items =  item.findAll();
-//        Key<Item> i =  item.save(new Book(null, "awesome item", "awesome author"));
-        return CompletableFuture.completedFuture(items);
+
+    public Result saveDvd() {
+        JsonNode json = request().body().asJson();
+        if(json == null){
+            return badRequest(Response.generateResponse("Expecting Json data", false));
+        }
+        dvd.save(Json.fromJson(json, DVD.class));
+        return ok("insert dvd success");
     }
 
-    private CompletableFuture<List<DVD>> retrieveDvdsResponse() {
-        List<DVD> items =  dvd.findAll();
-//        Key<Item> i =  item.save(new Book(null, "awesome item", "awesome author"));
-        return CompletableFuture.completedFuture(items);
-    }
+    public Result saveBook() {
+        JsonNode json = request().body().asJson();
+        if(json == null){
+            return badRequest(Response.generateResponse("Expecting Json data", false));
+        }
 
-    public CompletionStage<Result> save() {
-        // Use a different task with explicit EC
-        return retrieveSaveResponse().thenApplyAsync(answer -> {
-            // uses Http.Context
-//            ctx().flash().put("info", "Response updated!");
-            return ok(String.valueOf(answer));
-        }, httpExecutionContext.current());
-    }
+        Book decerializedBook = Json.fromJson(json, Book.class);
 
-    private CompletableFuture<Key<Book>> retrieveSaveResponse() {
-        Book it = new Book(null, "ui", "i");
-        Key<Book> i =  item.save(it);
-        return CompletableFuture.completedFuture(i);
-    }
+        Reader reader2 = decerializedBook.getCurrentReader();
+        Author author2 = decerializedBook.getAuthor();
 
-    public CompletionStage<Result> saveDvd() {
-        // Use a different task with explicit EC
-        return retrieveDSaveResponse().thenApplyAsync(answer -> {
-            // uses Http.Context
-//            ctx().flash().put("info", "Response updated!");
-            return ok(String.valueOf(answer));
-        }, httpExecutionContext.current());
-    }
+        Key<Reader> returnedReader = reader.save(reader2);
+        System.out.println("Reader: "+returnedReader.getId());
+        decerializedBook.getCurrentReader().setId(new ObjectId(String.valueOf(returnedReader.getId())));
 
-    private CompletableFuture<Key<DVD>> retrieveDSaveResponse() {
-        DVD it = new DVD(null, "hsdi", "idsf");
-        Key<DVD> i =  dvd.save(it);
-        return CompletableFuture.completedFuture(i);
+        Key<Author> returnedAuthor = authorRepo.save(author2);
+        System.out.println("Author: "+returnedAuthor.getId());
+        decerializedBook.getAuthor().setId(new ObjectId(String.valueOf(returnedAuthor.getId())));
+
+        Key<Book> returned = book.save(decerializedBook);
+        return ok(String.valueOf(returned.getId()));
     }
 
 }

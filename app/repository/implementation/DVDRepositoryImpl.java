@@ -9,7 +9,7 @@ import org.mongodb.morphia.Key;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IDVDRepositoryImpl implements IDVDRepository {
+public class DVDRepositoryImpl implements IDVDRepository {
     @Override
     public Key<DVD> save(DVD item) {
         System.out.println(item.getAuthor());

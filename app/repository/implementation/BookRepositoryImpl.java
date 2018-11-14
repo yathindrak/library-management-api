@@ -3,12 +3,12 @@ package repository.implementation;
 import database.Connection;
 import models.Book;
 import org.mongodb.morphia.Key;
-import repository.IItemRepository;
+import repository.IBookRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemRepositoryImpl implements IItemRepository {
+public class BookRepositoryImpl implements IBookRepository {
     @Override
     public Key<Book> save(Book item) {
         System.out.println(item.getAuthor());

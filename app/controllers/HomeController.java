@@ -1,15 +1,9 @@
 package controllers;
 
-import models.Book;
-import models.Item;
-import org.mongodb.morphia.Key;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.*;
 import com.google.inject.Inject;
-import repository.IItemRepository;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
+import repository.IBookRepository;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -18,7 +12,7 @@ import java.util.concurrent.CompletionStage;
 public class HomeController extends Controller {
 
     @Inject
-    private IItemRepository item;
+    private IBookRepository item;
 
     private HttpExecutionContext httpExecutionContext;
 
