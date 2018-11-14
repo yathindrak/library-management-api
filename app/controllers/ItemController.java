@@ -13,24 +13,21 @@ import repository.IDVDRepository;
 import repository.IBookRepository;
 import play.libs.Json;
 import repository.IReaderRepository;
-import utils.DateTime;
 import utils.Response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 public class ItemController  extends Controller {
 
     @Inject
-    private IBookRepository book;
+    private IBookRepository bookRepo;
 
     @Inject
-    private IDVDRepository dvd;
+    private IDVDRepository dvdRepo;
 
     @Inject
-    private IReaderRepository reader;
+    private IReaderRepository readerRepo;
 
     @Inject
     private IAuthorRepository authorRepo;
@@ -44,8 +41,8 @@ public class ItemController  extends Controller {
 
     public Result getAll() {
         List<Item> itemList = new ArrayList<>();
-        List<DVD> dvds = dvd.findAll();
-        List<Book> items = book.findAll();
+        List<DVD> dvds = dvdRepo.findAll();
+        List<Book> items = bookRepo.findAll();
         itemList.addAll(dvds);
         itemList.addAll(items);
         return ok(Json.toJson(itemList));
@@ -57,8 +54,8 @@ public class ItemController  extends Controller {
         if(json == null){
             return badRequest(Response.generateResponse("Expecting Json data", false));
         }
-        dvd.save(Json.fromJson(json, DVD.class));
-        return ok("insert dvd success");
+        dvdRepo.save(Json.fromJson(json, DVD.class));
+        return ok("insert dvdRepo success");
     }
 
     public Result saveBook() {
@@ -67,20 +64,18 @@ public class ItemController  extends Controller {
             return badRequest(Response.generateResponse("Expecting Json data", false));
         }
 
-        Book decerializedBook = Json.fromJson(json, Book.class);
+        Book deserializedBook = Json.fromJson(json, Book.class);
 
-        Reader reader2 = decerializedBook.getCurrentReader();
-        Author author2 = decerializedBook.getAuthor();
+        Reader reader = deserializedBook.getCurrentReader();
+        Author author = deserializedBook.getAuthor();
 
-        Key<Reader> returnedReader = reader.save(reader2);
-        System.out.println("Reader: "+returnedReader.getId());
-        decerializedBook.getCurrentReader().setId(new ObjectId(String.valueOf(returnedReader.getId())));
+        Key<Reader> returnedReader = readerRepo.save(reader);
+        deserializedBook.getCurrentReader().setId(new ObjectId(String.valueOf(returnedReader.getId())));
 
-        Key<Author> returnedAuthor = authorRepo.save(author2);
-        System.out.println("Author: "+returnedAuthor.getId());
-        decerializedBook.getAuthor().setId(new ObjectId(String.valueOf(returnedAuthor.getId())));
+        Key<Author> returnedAuthor = authorRepo.save(author);
+        deserializedBook.getAuthor().setId(new ObjectId(String.valueOf(returnedAuthor.getId())));
 
-        Key<Book> returned = book.save(decerializedBook);
+        Key<Book> returned = bookRepo.save(deserializedBook);
         return ok(String.valueOf(returned.getId()));
     }
 
