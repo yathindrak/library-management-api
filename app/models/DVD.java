@@ -15,6 +15,8 @@ public class DVD extends Item {
     private String producer;
     private List<Actor> actors;
 
+    /*
+    * This constructor for morphia get method*/
     public DVD() {
         super(null, null, null, null, null, null, null);
         this.availLanguages = null;

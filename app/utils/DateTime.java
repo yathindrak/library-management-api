@@ -1,9 +1,19 @@
 package utils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DateTime {
     private int year; // holds given year
     private int month; // holds given month
     private int day; // holds given day
+
+    /*
+     * This constructor for morphia get method*/
+    public DateTime() {
+        this.year = 0;
+        this.month = 0;
+        this.day = 0;
+    }
 
     /**
      * Constructor of DateTime
@@ -11,7 +21,9 @@ public class DateTime {
      * @param month -  month
      * @param day - day
      */
-    public DateTime(int year, int month, int day) {
+    public DateTime(@JsonProperty("year") int year,
+                    @JsonProperty("month") int month,
+                    @JsonProperty("day") int day) {
         this.year = year;
         this.month = month;
         this.day = day;
