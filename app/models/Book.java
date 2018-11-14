@@ -14,12 +14,18 @@ public class Book extends Item {
 //        this.author = null;
 //    }
 
+    public Book() {
+        super(null, null, null, null, null, null, null);
+        this.author = null;
+    }
+
     @JsonCreator
     public Book(@JsonProperty("id") ObjectId id, @JsonProperty("isbn") String isbn,
                 @JsonProperty("title") String title, @JsonProperty("sector") String sector,
                 @JsonProperty("publicationDate") DateTime publicationDate,
                 @JsonProperty("borrowedDate") DateTime borrowedDate,
-                @JsonProperty("currentReader") Reader currentReader, @JsonProperty("author") Author author) {
+                @JsonProperty("currentReader") Reader currentReader,
+                @JsonProperty("author") Author author) {
         super(id, isbn, title, sector, publicationDate, borrowedDate, currentReader);
         this.author = author;
     }

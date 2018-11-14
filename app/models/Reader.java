@@ -16,6 +16,13 @@ public class Reader extends Person{
 //        this.email = null;
 //    }
 
+
+    public Reader() {
+        super(null, null);
+        this.mobile = null;
+        this.email = null;
+    }
+
     @JsonCreator
     public Reader(@JsonProperty("id") ObjectId id,@JsonProperty("name") String name,
                   @JsonProperty("mobile") String mobile, @JsonProperty("email") String email) {

@@ -8,11 +8,8 @@ import org.mongodb.morphia.Key;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
-import repository.IAuthorRepository;
-import repository.IDVDRepository;
-import repository.IBookRepository;
+import repository.*;
 import play.libs.Json;
-import repository.IReaderRepository;
 import utils.Response;
 
 import java.util.ArrayList;
@@ -32,6 +29,9 @@ public class ItemController  extends Controller {
     @Inject
     private IAuthorRepository authorRepo;
 
+    @Inject
+    private IActorRepository actorRepo;
+
     private HttpExecutionContext httpExecutionContext;
 
     @Inject
@@ -42,9 +42,9 @@ public class ItemController  extends Controller {
     public Result getAll() {
         List<Item> itemList = new ArrayList<>();
         List<DVD> dvds = dvdRepo.findAll();
-        List<Book> items = bookRepo.findAll();
+        List<Book> books = bookRepo.findAll();
         itemList.addAll(dvds);
-        itemList.addAll(items);
+        itemList.addAll(books);
         return ok(Json.toJson(itemList));
     }
 
@@ -54,7 +54,20 @@ public class ItemController  extends Controller {
         if(json == null){
             return badRequest(Response.generateResponse("Expecting Json data", false));
         }
-        dvdRepo.save(Json.fromJson(json, DVD.class));
+
+        DVD deserializedDVD = Json.fromJson(json, DVD.class);
+
+        Reader reader = deserializedDVD.getCurrentReader();
+        List<Actor> actors = deserializedDVD.getActors();
+
+        for (int i=0; i< actors.size(); i++) {
+            actorRepo.save(actors.get(i));
+        }
+
+        Key<Reader> returnedReader = readerRepo.save(reader);
+        deserializedDVD.getCurrentReader().setId(new ObjectId(String.valueOf(returnedReader.getId())));
+
+        dvdRepo.save(deserializedDVD);
         return ok("insert dvdRepo success");
     }
 
