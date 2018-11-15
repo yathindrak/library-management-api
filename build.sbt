@@ -9,6 +9,7 @@ scalaVersion := "2.12.6"
 
 libraryDependencies += guice
 
+libraryDependencies += filters
 
 // https://mvnrepository.com/artifact/org.mongodb.morphia/morphia
 libraryDependencies += "org.mongodb.morphia" % "morphia" % "1.3.0"
