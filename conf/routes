@@ -10,5 +10,9 @@ POST    /items/savebook                  controllers.ItemController.saveBook
 
 POST    /items/savedvd                   controllers.ItemController.saveDvd
 
+POST    /borrow/:id/:date/:borrower      controllers.ItemController.borrow(id: String, date: String, borrower: String)
+
+POST    /returnBook/:id                  controllers.ItemController.returnBook(id: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

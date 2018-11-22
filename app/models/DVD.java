@@ -2,7 +2,6 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import utils.DateTime;
 

@@ -6,9 +6,11 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import utils.DateTime;
 
+import java.util.List;
+
 @Entity(value = "books", noClassnameStored = true)
 public class Book extends Item {
-    private Author author;
+    private List<Author> author;
 
     public Book() {
         super(null, null, null, null, null, null, null);
@@ -21,16 +23,16 @@ public class Book extends Item {
                 @JsonProperty("publicationDate") DateTime publicationDate,
                 @JsonProperty("borrowedDate") DateTime borrowedDate,
                 @JsonProperty("currentReader") Reader currentReader,
-                @JsonProperty("author") Author author) {
+                @JsonProperty("author") List<Author> author) {
         super(id, isbn, title, sector, publicationDate, borrowedDate, currentReader);
         this.author = author;
     }
 
-    public Author getAuthor() {
+    public List<Author> getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(List<Author> author) {
         this.author = author;
     }
 }
