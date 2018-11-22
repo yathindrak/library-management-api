@@ -6,6 +6,10 @@
 
 GET     /items                           controllers.ItemController.getAll
 
+GET     /members                         controllers.MembersController.getAll
+
+POST    /member                          controllers.MembersController.saveMember
+
 POST    /items/savebook                  controllers.ItemController.saveBook
 
 POST    /items/savedvd                   controllers.ItemController.saveDvd

@@ -6,15 +6,9 @@ import org.mongodb.morphia.annotations.Entity;
 
 @Entity(value = "readers", noClassnameStored = true)
 public class Reader extends Person{
+
     private String mobile;
     private String email;
-
-//    @JsonCreator
-//    public Reader() {
-//        this.mobile = null;
-//        this.email = null;
-//    }
-
 
     public Reader() {
         super(null, null);
@@ -27,6 +21,22 @@ public class Reader extends Person{
                   @JsonProperty("mobile") String mobile, @JsonProperty("email") String email) {
         super(id, name);
         this.mobile = mobile;
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
     }
 }

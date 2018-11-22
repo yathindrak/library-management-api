@@ -16,7 +16,6 @@ import java.util.List;
 public class BookRepositoryImpl implements IBookRepository {
     @Override
     public Key<Book> save(Book item) {
-        System.out.println(item.getAuthor());
         Key<Book> savedItem = Connection.getDatastore().save(item);
         return savedItem;
     }

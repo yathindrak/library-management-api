@@ -16,7 +16,6 @@ public class ReaderRepositoryImpl implements IReaderRepository {
     @Override
     public List<Reader> findAll() {
         List<Reader> readers = Connection.getDatastore().createQuery(Reader.class).asList();
-        System.out.println(readers);
         return readers;
     }
 }
