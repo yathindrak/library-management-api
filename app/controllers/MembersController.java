@@ -29,7 +29,6 @@ public class MembersController extends Controller {
         return ok(Json.toJson(members));
     }
 
-
     public Result saveMember() {
         JsonNode json = request().body().asJson();
         if(json == null){

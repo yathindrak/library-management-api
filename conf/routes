@@ -4,23 +4,27 @@
 
 # An example controller showing a sample home page
 
-GET     /items                           controllers.ItemController.getAll
+GET     /items                           controllers.WestminsterLibraryManager.getAll
 
 GET     /members                         controllers.MembersController.getAll
 
 POST    /member                          controllers.MembersController.saveMember
 
-POST    /items/savebook                  controllers.ItemController.saveBook
+POST    /items/savebook                  controllers.WestminsterLibraryManager.saveBook
 
-POST    /items/savedvd                   controllers.ItemController.saveDvd
+POST    /items/savedvd                   controllers.WestminsterLibraryManager.saveDvd
 
-DELETE  /items/book/:id                  controllers.ItemController.deleteBook(id: String)
+DELETE  /items/book/:id                  controllers.WestminsterLibraryManager.deleteBook(id: String)
 
-POST    /borrow/:id/:date/:borrower      controllers.ItemController.borrowBook(id: String, date: String, borrower: String)
+DELETE  /items/dvd/:id                   controllers.WestminsterLibraryManager.deleteDvd(id: String)
 
-POST    /borrowDvd/:id/:date/:borrower   controllers.ItemController.borrowDvd(id: String, date: String, borrower: String)
+POST    /borrowBook/:id/:date/:borrower  controllers.WestminsterLibraryManager.borrowBook(id: String, date: String, borrower: String)
 
-POST    /returnBook/:id                  controllers.ItemController.returnBook(id: String)
+POST    /borrowDvd/:id/:date/:borrower   controllers.WestminsterLibraryManager.borrowDvd(id: String, date: String, borrower: String)
+
+POST    /returnBook/:id                  controllers.WestminsterLibraryManager.returnBook(id: String)
+
+POST    /returnDvd/:id                   controllers.WestminsterLibraryManager.returnDvd(id: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

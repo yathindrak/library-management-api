@@ -15,7 +15,7 @@ import utils.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemController  extends Controller {
+public class WestminsterLibraryManager extends Controller {
 
     @Inject
     private IBookRepository bookRepo;
@@ -35,7 +35,7 @@ public class ItemController  extends Controller {
     private HttpExecutionContext httpExecutionContext;
 
     @Inject
-    public ItemController(HttpExecutionContext ec) {
+    public WestminsterLibraryManager(HttpExecutionContext ec) {
         this.httpExecutionContext = ec;
     }
 
@@ -156,12 +156,35 @@ public class ItemController  extends Controller {
         return ok(Json.toJson("Success returning the book"));
     }
 
+    public Result returnDvd(String id) {
+        if(id == null){
+            return badRequest(Response.generateResponse("Expecting required data", false));
+        }
+
+        boolean isSth = dvdRepo.updateReturning(id);
+        System.out.println(isSth);
+        return ok(Json.toJson("Success returning the dvd"));
+    }
+
     public Result deleteBook(String id) {
         if(id == null){
             return badRequest(Response.generateResponse("Expecting required data", false));
         }
 
         boolean result = bookRepo.delete(id);
+        if (result) {
+            return ok(Json.toJson("Success"));
+        } else {
+            return badRequest(Response.generateResponse("Invalid data provided", false));
+        }
+    }
+
+    public Result deleteDvd(String id) {
+        if(id == null){
+            return badRequest(Response.generateResponse("Expecting required data", false));
+        }
+
+        boolean result = dvdRepo.delete(id);
         if (result) {
             return ok(Json.toJson("Success"));
         } else {
