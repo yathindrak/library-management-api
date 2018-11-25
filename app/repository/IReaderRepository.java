@@ -11,5 +11,7 @@ import java.util.List;
 public interface IReaderRepository {
     Key<Reader> save(Reader reader);
 
+    Reader findById(String id);
+
     List<Reader> findAll();
 }

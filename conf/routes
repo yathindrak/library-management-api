@@ -14,7 +14,11 @@ POST    /items/savebook                  controllers.ItemController.saveBook
 
 POST    /items/savedvd                   controllers.ItemController.saveDvd
 
-POST    /borrow/:id/:date/:borrower      controllers.ItemController.borrow(id: String, date: String, borrower: String)
+DELETE  /items/book/:id                  controllers.ItemController.deleteBook(id: String)
+
+POST    /borrow/:id/:date/:borrower      controllers.ItemController.borrowBook(id: String, date: String, borrower: String)
+
+POST    /borrowDvd/:id/:date/:borrower   controllers.ItemController.borrowDvd(id: String, date: String, borrower: String)
 
 POST    /returnBook/:id                  controllers.ItemController.returnBook(id: String)
 

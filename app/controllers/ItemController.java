@@ -3,7 +3,6 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import models.*;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Key;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
@@ -58,15 +57,16 @@ public class ItemController  extends Controller {
 
         DVD deserializedDVD = Json.fromJson(json, DVD.class);
 
-        Reader reader = deserializedDVD.getCurrentReader();
+        // get reader by id
+        Reader reader = readerRepo.findById(deserializedDVD.getCurrentReader().getId());
+
         List<Actor> actors = deserializedDVD.getActors();
 
         for (int i=0; i< actors.size(); i++) {
             actorRepo.save(actors.get(i));
         }
 
-        Key<Reader> returnedReader = readerRepo.save(reader);
-        deserializedDVD.getCurrentReader().setId(String.valueOf(returnedReader.getId()));
+        deserializedDVD.setCurrentReader(reader);
 
         dvdRepo.save(deserializedDVD);
         return ok("insert dvdRepo success");
@@ -80,25 +80,21 @@ public class ItemController  extends Controller {
 
         Book deserializedBook = Json.fromJson(json, Book.class);
 
-        Reader reader = deserializedBook.getCurrentReader();
+        // get reader by id
+        Reader reader = readerRepo.findById(deserializedBook.getCurrentReader().getId());
 
         List<Author> authors = deserializedBook.getAuthor();
 
         for (int i=0; i< authors.size(); i++) {
             authorRepo.save(authors.get(i));
         }
-
-        Key<Reader> returnedReader = readerRepo.save(reader);
-        deserializedBook.getCurrentReader().setId(String.valueOf(returnedReader.getId()));
-
-//        Key<Author> returnedAuthor = authorRepo.save(author);
-//        deserializedBook.getAuthor().setId(String.valueOf(returnedAuthor.getId()));
+        deserializedBook.setCurrentReader(reader);
 
         Key<Book> returned = bookRepo.save(deserializedBook);
         return ok(String.valueOf(returned.getId()));
     }
 
-    public Result borrow(String id,String date,String borrower) {
+    public Result borrowBook(String id, String date, String borrower) {
         if(id == null || date == null || borrower == null){
             return badRequest(Response.generateResponse("Expecting required data", false));
         }
@@ -124,6 +120,32 @@ public class ItemController  extends Controller {
         return ok(Json.toJson(book));
     }
 
+    public Result borrowDvd(String id, String date, String borrower) {
+        if(id == null || date == null || borrower == null){
+            return badRequest(Response.generateResponse("Expecting required data", false));
+        }
+
+        String[] dateArr = date.split("-");
+
+        // find id by object id of the book
+        DVD dvd = dvdRepo.findById(id);
+
+        dvd.setBorrowedDate(new DateTime(Integer.parseInt(dateArr[0]),
+                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])));
+
+        DateTime dateTime = new DateTime(Integer.parseInt(dateArr[0]),
+                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+        dvd.getCurrentReader().setName(borrower);
+
+        // later take date from request or get it by reader id
+        Reader reader = dvd.getCurrentReader();
+        reader.setName(borrower);
+
+        boolean isSth = dvdRepo.updateBorrowing(id, dvd, dateTime, reader);
+        System.out.println(isSth);
+        return ok(Json.toJson(dvd));
+    }
+
     public Result returnBook(String id) {
         if(id == null){
             return badRequest(Response.generateResponse("Expecting required data", false));
@@ -134,4 +156,16 @@ public class ItemController  extends Controller {
         return ok(Json.toJson("Success returning the book"));
     }
 
+    public Result deleteBook(String id) {
+        if(id == null){
+            return badRequest(Response.generateResponse("Expecting required data", false));
+        }
+
+        boolean result = bookRepo.delete(id);
+        if (result) {
+            return ok(Json.toJson("Success"));
+        } else {
+            return badRequest(Response.generateResponse("Invalid data provided", false));
+        }
+    }
 }

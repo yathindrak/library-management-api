@@ -1,5 +1,6 @@
 package repository.implementation;
 
+import com.mongodb.WriteResult;
 import database.Connection;
 import models.Book;
 import models.Reader;
@@ -69,5 +70,17 @@ public class BookRepositoryImpl implements IBookRepository {
         Connection.getDatastore().update(query, operation3);
 
         return true;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        Query<Book> query = Connection.getDatastore().find(Book.class).field("_id").equal(new ObjectId(id));
+
+        Book result = Connection.getDatastore().findAndDelete(query);
+
+        if (result != null) {
+            return true;
+        }
+        return false;
     }
 }
