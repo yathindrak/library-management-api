@@ -33,6 +33,7 @@ public class DVDRepositoryImpl implements IDVDRepository {
     @Override
     public DVD findById(String id) {
         DVD dvd= Connection.getDatastore().get(DVD.class, new ObjectId(id));
+        System.out.println(dvd);
         return dvd;
     }
 
@@ -41,8 +42,6 @@ public class DVDRepositoryImpl implements IDVDRepository {
 
         Query query = Connection.getDatastore().find(DVD.class).field("_id").equal(new ObjectId(id));
 
-        System.out.println(borrowedDate);
-        System.out.println(query);
         UpdateOperations<DVD> operation2 = Connection.getDatastore()
                 .createUpdateOperations(DVD.class).set("borrowedDate", borrowedDate);
 

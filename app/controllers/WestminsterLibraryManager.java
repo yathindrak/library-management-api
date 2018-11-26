@@ -130,6 +130,7 @@ public class WestminsterLibraryManager extends Controller {
         // find id by object id of the book
         DVD dvd = dvdRepo.findById(id);
 
+        System.out.println(dvd.getId());
         dvd.setBorrowedDate(new DateTime(Integer.parseInt(dateArr[0]),
                 Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])));
 

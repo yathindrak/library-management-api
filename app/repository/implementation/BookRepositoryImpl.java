@@ -34,6 +34,7 @@ public class BookRepositoryImpl implements IBookRepository {
     @Override
     public Book findById(String id) {
         Book book= Connection.getDatastore().get(Book.class, new ObjectId(id));
+        System.out.println(book);
         return book;
     }
 
@@ -73,12 +74,18 @@ public class BookRepositoryImpl implements IBookRepository {
 
     @Override
     public boolean delete(String id) {
-        Query<Book> query = Connection.getDatastore().find(Book.class).field("_id").equal(new ObjectId(id));
+        try {
+            Query query = Connection.getDatastore().find(Book.class).field("_id").equal(new ObjectId(id));
 
-        Book result = Connection.getDatastore().findAndDelete(query);
+            Book result = (Book) Connection.getDatastore().findAndDelete(query);
 
-        if (result != null) {
-            return true;
+            System.out.println(result);
+
+            if (result != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
         return false;
     }

@@ -1,7 +1,6 @@
 package repository;
 
 import com.google.inject.ImplementedBy;
-import com.mongodb.WriteResult;
 import models.Book;
 import models.Reader;
 import org.mongodb.morphia.Key;

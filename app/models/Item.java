@@ -1,13 +1,11 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Id;
 import utils.DateTime;
 
 public abstract class Item {
     @Id
-    private String _id;
+    private String id;
     private String isbn;
     private String title;
     private String sector;
@@ -29,7 +27,7 @@ public abstract class Item {
 
     public Item(String id, String isbn, String title, String sector, DateTime publicationDate,
                 DateTime borrowedDate, Reader currentReader) {
-        this._id = id;
+        this.id = id;
         this.isbn = isbn;
         this.title = title;
         this.sector = sector;
@@ -39,11 +37,11 @@ public abstract class Item {
     }
 
     public String getId() {
-        return _id;
+        return id;
     }
 
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     public String getIsbn() {
