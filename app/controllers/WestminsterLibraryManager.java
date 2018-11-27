@@ -58,7 +58,7 @@ public class WestminsterLibraryManager extends Controller {
         DVD deserializedDVD = Json.fromJson(json, DVD.class);
 
         // get reader by id
-        Reader reader = readerRepo.findById(deserializedDVD.getCurrentReader().getId());
+        Reader reader = new Reader();
 
         List<Actor> actors = deserializedDVD.getActors();
 
@@ -81,7 +81,7 @@ public class WestminsterLibraryManager extends Controller {
         Book deserializedBook = Json.fromJson(json, Book.class);
 
         // get reader by id
-        Reader reader = readerRepo.findById(deserializedBook.getCurrentReader().getId());
+        Reader reader = new Reader();
 
         List<Author> authors = deserializedBook.getAuthor();
 
@@ -111,12 +111,13 @@ public class WestminsterLibraryManager extends Controller {
                 Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
         book.getCurrentReader().setName(borrower);
 
-        // later take date from request or get it by reader id
-        Reader reader = book.getCurrentReader();
-        reader.setName(borrower);
+        // get reader by id
+        Reader reader = readerRepo.findById(borrower);
 
-        boolean isSth = bookRepo.updateBorrowing(id, book, dateTime, reader);
-        System.out.println(isSth);
+        if (reader == null) {
+            return badRequest(Response.generateResponse("Invalid reader id", false));
+        }
+        bookRepo.updateBorrowing(id, book, dateTime, reader);
         return ok(Json.toJson(book));
     }
 
@@ -130,20 +131,20 @@ public class WestminsterLibraryManager extends Controller {
         // find id by object id of the book
         DVD dvd = dvdRepo.findById(id);
 
-        System.out.println(dvd.getId());
         dvd.setBorrowedDate(new DateTime(Integer.parseInt(dateArr[0]),
                 Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])));
 
         DateTime dateTime = new DateTime(Integer.parseInt(dateArr[0]),
                 Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
-        dvd.getCurrentReader().setName(borrower);
 
-        // later take date from request or get it by reader id
-        Reader reader = dvd.getCurrentReader();
-        reader.setName(borrower);
+        // get reader by id
+        Reader reader = readerRepo.findById(borrower);
 
-        boolean isSth = dvdRepo.updateBorrowing(id, dvd, dateTime, reader);
-        System.out.println(isSth);
+        if (reader == null) {
+            return badRequest(Response.generateResponse("Invalid reader id", false));
+        }
+
+        dvdRepo.updateBorrowing(id, dvd, dateTime, reader);
         return ok(Json.toJson(dvd));
     }
 
