@@ -1,5 +1,6 @@
 package repository.implementation;
 
+import exceptions.ISBNAlreadyExistsException;
 import models.DVD;
 import models.Reader;
 import org.bson.types.ObjectId;
@@ -15,18 +16,20 @@ import java.util.List;
 
 public class DVDRepositoryImpl implements IDVDRepository {
     @Override
-    public Key<DVD> save(DVD item) {
-        Key<DVD> savedItem = Connection.getDatastore().save(item);
+    public Key<DVD> save(DVD item) throws ISBNAlreadyExistsException {
+        DVD dvdByISBN = Connection.getDatastore().find(DVD.class).field("isbn").equal(item.getIsbn()).get();
+        Key<DVD> savedItem = null;
+        if (dvdByISBN == null) {
+            savedItem = Connection.getDatastore().save(item);
+        } else {
+            throw new ISBNAlreadyExistsException("Isbn already exists");
+        }
         return savedItem;
     }
 
     @Override
     public List<DVD> findAll() {
-//        List<DVD> items = new ArrayList<>();
         List<DVD> dvds = Connection.getDatastore().createQuery(DVD.class).asList();
-//        dvds.forEach(dvd -> {
-//            items.add(dvd);
-//        });
         return dvds;
     }
 

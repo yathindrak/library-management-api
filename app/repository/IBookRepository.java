@@ -1,6 +1,7 @@
 package repository;
 
 import com.google.inject.ImplementedBy;
+import exceptions.ISBNAlreadyExistsException;
 import models.Book;
 import models.Reader;
 import org.mongodb.morphia.Key;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @ImplementedBy(BookRepositoryImpl.class)
 public interface IBookRepository {
-    Key<Book> save(Book item);
+    Key<Book> save(Book item) throws ISBNAlreadyExistsException;
 
     List<Book> findAll();
 

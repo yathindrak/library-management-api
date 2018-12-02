@@ -16,7 +16,13 @@ public class ReaderRepositoryImpl implements IReaderRepository {
 
     @Override
     public Reader findById(String id) {
-        Reader reader= Connection.getDatastore().get(Reader.class, new ObjectId(id));
+        Reader reader = null;
+        try {
+            reader= Connection.getDatastore().get(Reader.class, new ObjectId(id));
+        } catch (Exception e){
+            return new Reader();
+        }
+
         return reader;
     }
 

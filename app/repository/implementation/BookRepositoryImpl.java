@@ -1,6 +1,7 @@
 package repository.implementation;
 
 import database.Connection;
+import exceptions.ISBNAlreadyExistsException;
 import models.Book;
 import models.Reader;
 import org.bson.types.ObjectId;
@@ -15,8 +16,14 @@ import java.util.List;
 
 public class BookRepositoryImpl implements IBookRepository {
     @Override
-    public Key<Book> save(Book item) {
-        Key<Book> savedItem = Connection.getDatastore().save(item);
+    public Key<Book> save(Book item) throws ISBNAlreadyExistsException {
+        Book bookByISBN = Connection.getDatastore().find(Book.class).field("isbn").equal(item.getIsbn()).get();
+        Key<Book> savedItem = null;
+        if (bookByISBN == null) {
+            savedItem = Connection.getDatastore().save(item);
+        } else {
+            throw new ISBNAlreadyExistsException("Isbn already exists");
+        }
         return savedItem;
     }
 

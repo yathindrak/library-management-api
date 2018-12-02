@@ -1,6 +1,7 @@
 package repository;
 
 import com.google.inject.ImplementedBy;
+import exceptions.ISBNAlreadyExistsException;
 import models.DVD;
 import models.Reader;
 import org.mongodb.morphia.Key;
@@ -11,7 +12,7 @@ import utils.DateTime;
 
 @ImplementedBy(DVDRepositoryImpl.class)
 public interface IDVDRepository {
-    Key<DVD> save(DVD item);
+    Key<DVD> save(DVD item) throws ISBNAlreadyExistsException;
 
     List<DVD> findAll();
 

@@ -6,6 +6,7 @@ import com.mongodb.MongoClientURI;
 import com.typesafe.config.ConfigFactory;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import play.Logger;
 
 public class Connection {
     public static Datastore datastore;
@@ -22,17 +23,27 @@ public class Connection {
     }
 
     public static void initDatastore(){
-        final Morphia morphia = new Morphia();
+        try {
+            final Morphia morphia = new Morphia();
 
-        // tell it to fine model class
-        morphia.mapPackage("models");
+            // map the model package
+            morphia.mapPackage("models");
 
-        MongoClientOptions.Builder options = MongoClientOptions.builder();
-        options.socketKeepAlive(true);
+            MongoClientOptions.Builder options = MongoClientOptions.builder();
+            // keep alive
+            options.socketKeepAlive(true);
 
-        MongoClientURI uri = new MongoClientURI("mongodb://librarymgt:librarymgt1@ds137913.mlab.com:37913/librarymgt", options);
+            // variables from application.conf
+            String mongo_username = ConfigFactory.load().getString("mongo_username");
+            String mongo_pwd = ConfigFactory.load().getString("mongo_pwd");
+            String mongo_db = ConfigFactory.load().getString("mongo_db");
+            MongoClientURI uri = new MongoClientURI("mongodb://"+mongo_username+":"+mongo_pwd+"@ds137913.mlab.com:37913/"+mongo_db, options);
 
-        datastore = morphia.createDatastore(new MongoClient(uri), "librarymgt");
+            // init the data store
+            datastore = morphia.createDatastore(new MongoClient(uri), mongo_db);
+        } catch (Exception e) {
+            Logger.error("Error occurred on the database connection");
+        }
 
     }
 }
