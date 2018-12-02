@@ -8,6 +8,9 @@ import repository.IReservationRepository;
 
 import java.util.List;
 
+/**
+ * Class to perform database operations regarding reservations
+ */
 public class ReservationRepositoryImpl implements IReservationRepository {
     @Override
     public Key<Reservation> save(Reservation reservation) {

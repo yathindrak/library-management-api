@@ -17,6 +17,9 @@ import utils.Response;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main controller in the library management rest api
+ */
 public class WestminsterLibraryManager extends Controller implements LibraryManager{
 
     @Inject
@@ -44,6 +47,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         this.httpExecutionContext = ec;
     }
 
+    /**
+     * Get all items
+     * @return Result of List<Item>
+     */
     @Override
     public Result getAll() {
         List<Item> itemList = new ArrayList<>();
@@ -56,6 +63,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson(itemList));
     }
 
+    /**
+     * Save a DVD
+     * @return a result
+     */
     @Override
     public Result saveDvd() {
         JsonNode json = request().body().asJson();
@@ -87,6 +98,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok("success saving dvd");
     }
 
+    /**
+     * Save a book
+     * @return a result
+     */
     @Override
     public Result saveBook() {
         JsonNode json = request().body().asJson();
@@ -118,6 +133,13 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(String.valueOf("success saving book"));
     }
 
+    /**
+     * Borrow a book
+     * @param id
+     * @param date
+     * @param borrower
+     * @return borrowed book as a Result
+     */
     @Override
     public Result borrowBook(String id, String date, String borrower) {
         if(id == null || date == null || borrower == null){
@@ -143,8 +165,7 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         catch (Exception e) {
             return badRequest(Response.generateResponse("Invalid reader id", false));
         }
-        System.out.println(reader.getEmail());
-        if (reader.getEmail() == null) {
+        if (reader.getId() == null) {
             return badRequest(Response.generateResponse("Invalid reader id", false));
         }
         bookRepo.updateBorrowing(id, book, dateTime, reader);
@@ -153,6 +174,13 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson(book));
     }
 
+    /**
+     * Borrow a DVD
+     * @param id
+     * @param date
+     * @param borrower
+     * @return DVD borrowed
+     */
     @Override
     public Result borrowDvd(String id, String date, String borrower) {
         if(id == null || date == null || borrower == null){
@@ -178,10 +206,9 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         catch (Exception e) {
             return badRequest(Response.generateResponse("Invalid reader id", false));
         }
-        if (reader == null) {
+        if (reader.getId() == null) {
             return badRequest(Response.generateResponse("Invalid reader id", false));
         }
-
         dvdRepo.updateBorrowing(id, dvd, dateTime, reader);
         if(dvd != null)
             Logger.info("success borrowing dvd");
@@ -189,6 +216,11 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson(dvd));
     }
 
+    /**
+     * Return book
+     * @param id
+     * @return a result
+     */
     @Override
     public Result returnBook(String id) {
         if(id == null){
@@ -202,6 +234,11 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson("Success returning the book"));
     }
 
+    /**
+     * Return DVD
+     * @param id
+     * @return a result
+     */
     @Override
     public Result returnDvd(String id) {
         if(id == null){
@@ -215,6 +252,11 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson("Success returning the dvd"));
     }
 
+    /**
+     * Delete book
+     * @param id
+     * @return a result
+     */
     @Override
     public Result deleteBook(String id) {
         if(id == null){
@@ -230,6 +272,11 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         }
     }
 
+    /**
+     * Delete DVD
+     * @param id
+     * @return a result
+     */
     @Override
     public Result deleteDvd(String id) {
         if(id == null){
@@ -245,6 +292,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         }
     }
 
+    /**
+     * Get all members
+     * @return a result
+     */
     @Override
     public Result getAllMembers() {
         List<Reader> members = readerRepo.findAll();
@@ -254,6 +305,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson(members));
     }
 
+    /**
+     * Save a member
+     * @return saved member as a Result
+     */
     @Override
     public Result saveMember() {
         JsonNode json = request().body().asJson();
@@ -271,6 +326,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson(returnedReader));
     }
 
+    /**
+     * Get all reservations
+     * @return List<Reservation>
+     */
     @Override
     public Result getAllReservations() {
         List<Reservation> reservations = reservationRepo.findAll();
@@ -280,6 +339,10 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         return ok(Json.toJson(reservations));
     }
 
+    /**
+     * Save a reservation
+     * @return saved reservation as Result
+     */
     @Override
     public Result saveReservation() {
         JsonNode json = request().body().asJson();
@@ -295,13 +358,19 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
 
         Reader reader = readerRepo.findById(reservation.getReservedReader().getId());
 
+        if (reader.getId() == null)  {
+            return badRequest(Response.generateResponse("Invalid user ID ", false));
+        }
+
         reservation.setReservedReader(reader);
 
         Key<Reservation> returnedReservation = reservationRepo.save(reservation);
 
-        if (returnedReservation != null)
+        if (returnedReservation != null) {
             Logger.info("saved the reservation");
+        } else {
+            return internalServerError(Response.generateResponse("Error occurred ", false));        }
 
-        return ok(Json.toJson(returnedReservation));
+        return ok(Json.toJson(reservation));
     }
 }

@@ -7,6 +7,9 @@ import repository.IActorRepository;
 
 import java.util.List;
 
+/**
+ * Class to perform database operations regarding actors
+ */
 public class ActorRepositoryImpl implements IActorRepository {
     @Override
     public Key<Actor> save(Actor actor) {

@@ -7,6 +7,9 @@ import repository.IAuthorRepository;
 
 import java.util.List;
 
+/**
+ * Class to perform database operations regarding authors
+ */
 public class AuthorRepositoryImpl implements IAuthorRepository {
     @Override
     public Key<Author> save(Author author) {

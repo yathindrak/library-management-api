@@ -7,6 +7,9 @@ import org.mongodb.morphia.Key;
 import repository.IReaderRepository;
 import java.util.List;
 
+/**
+ * Class to perform database operations regarding readers
+ */
 public class ReaderRepositoryImpl implements IReaderRepository {
     @Override
     public Key<Reader> save(Reader reader) {

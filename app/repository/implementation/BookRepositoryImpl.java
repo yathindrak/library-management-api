@@ -7,6 +7,7 @@ import models.Reader;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Key;
 import org.mongodb.morphia.query.UpdateOperations;
+import play.Logger;
 import repository.IBookRepository;
 import org.mongodb.morphia.query.Query;
 import utils.DateTime;
@@ -14,6 +15,9 @@ import utils.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to perform database operations regarding books
+ */
 public class BookRepositoryImpl implements IBookRepository {
     @Override
     public Key<Book> save(Book item) throws ISBNAlreadyExistsException {
@@ -34,14 +38,14 @@ public class BookRepositoryImpl implements IBookRepository {
         books.forEach(book -> {
             items.add(book);
         });
-        System.out.println(items);
+        Logger.info("Retrieved list of books");
         return items;
     }
 
     @Override
     public Book findById(String id) {
         Book book= Connection.getDatastore().get(Book.class, new ObjectId(id));
-        System.out.println(book);
+        Logger.info("Found book of id: "+ id);
         return book;
     }
 
@@ -86,13 +90,11 @@ public class BookRepositoryImpl implements IBookRepository {
 
             Book result = (Book) Connection.getDatastore().findAndDelete(query);
 
-            System.out.println(result);
-
             if (result != null) {
                 return true;
             }
         } catch (Exception e) {
-            System.out.println(e);
+            Logger.error("Error occurred deleting book id: "+ id);
         }
         return false;
     }

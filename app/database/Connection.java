@@ -8,12 +8,20 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import play.Logger;
 
+/**
+ * Singleton class to make the database connection
+ */
 public class Connection {
+    // Data-store
     public static Datastore datastore;
 
-    //private constructor to avoid client applications to use constructor
+    // private constructor to avoid creating objects
     private Connection(){}
 
+    /**
+     * Get the data store
+     * @return an instance of the datastore
+     */
     public static Datastore getDatastore(){
         if(datastore == null){
             initDatastore();
@@ -22,6 +30,9 @@ public class Connection {
         return datastore;
     }
 
+    /**
+     * Initialize an instance of the datastore, if there is no instance
+     */
     public static void initDatastore(){
         try {
             final Morphia morphia = new Morphia();

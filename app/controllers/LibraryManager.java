@@ -2,6 +2,9 @@ package controllers;
 
 import play.mvc.Result;
 
+/**
+ * Describes all controller methods of the library managing api
+ */
 public interface LibraryManager {
     Result getAll();
     Result saveDvd();

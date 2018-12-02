@@ -18,7 +18,7 @@ public interface IDVDRepository {
 
     DVD findById(String isbn);
 
-    boolean updateBorrowing(String id, DVD book, DateTime dateTime, Reader reader);
+    boolean updateBorrowing(String id, DVD dvd, DateTime dateTime, Reader reader);
 
     boolean updateReturning(String id);
 

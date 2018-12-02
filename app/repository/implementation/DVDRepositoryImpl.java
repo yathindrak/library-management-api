@@ -6,6 +6,7 @@ import models.Reader;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
+import play.Logger;
 import repository.IDVDRepository;
 
 import database.Connection;
@@ -14,6 +15,9 @@ import utils.DateTime;
 
 import java.util.List;
 
+/**
+ * Class to perform database operations regarding dvds
+ */
 public class DVDRepositoryImpl implements IDVDRepository {
     @Override
     public Key<DVD> save(DVD item) throws ISBNAlreadyExistsException {
@@ -36,7 +40,7 @@ public class DVDRepositoryImpl implements IDVDRepository {
     @Override
     public DVD findById(String id) {
         DVD dvd= Connection.getDatastore().get(DVD.class, new ObjectId(id));
-        System.out.println(dvd);
+        Logger.info("Found DVD of id: "+ id);
         return dvd;
     }
 
