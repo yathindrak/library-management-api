@@ -18,9 +18,9 @@ DELETE  /items/book/:id                  controllers.WestminsterLibraryManager.d
 
 DELETE  /items/dvd/:id                   controllers.WestminsterLibraryManager.deleteDvd(id: String)
 
-POST    /borrowBook/:id/:date/:borrower  controllers.WestminsterLibraryManager.borrowBook(id: String, date: String, borrower: String)
+POST    /borrowBook/:id/:date/:time/:borrower  controllers.WestminsterLibraryManager.borrowBook(id: String, date: String, time: String, borrower: String)
 
-POST    /borrowDvd/:id/:date/:borrower   controllers.WestminsterLibraryManager.borrowDvd(id: String, date: String, borrower: String)
+POST    /borrowDvd/:id/:date/:time/:borrower   controllers.WestminsterLibraryManager.borrowDvd(id: String, date: String, time: String, borrower: String)
 
 POST    /returnBook/:id                  controllers.WestminsterLibraryManager.returnBook(id: String)
 

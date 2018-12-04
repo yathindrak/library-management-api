@@ -1,11 +1,15 @@
 package utils;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DateTime {
     private int year; // holds given year
     private int month; // holds given month
     private int day; // holds given day
+    private int hour; // holds given day
+    private int minute; // holds given day
+    private int sec; // holds given day
 
     /*
      * This constructor for morphia get method*/
@@ -13,20 +17,58 @@ public class DateTime {
         this.year = 0;
         this.month = 0;
         this.day = 0;
+        this.hour = 0;
+        this.minute = 0;
+        this.sec = 0;
     }
+
+//    /**
+//     * Constructor of DateTime
+//     * @param year - year
+//     * @param month -  month
+//     * @param day - day
+//     */
+//    public DateTime(@JsonProperty("year") int year,
+//                    @JsonProperty("month") int month,
+//                    @JsonProperty("day") int day) {
+//        this.year = year;
+//        this.month = month;
+//        this.day = day;
+//    }
 
     /**
      * Constructor of DateTime
      * @param year - year
-     * @param month -  month
-     * @param day - day
+     * @param month - month
+     * @param day -day
+     * @param hour - hour
+     * @param minute - minute
+     * @param sec - seconds
      */
+    @JsonCreator
     public DateTime(@JsonProperty("year") int year,
                     @JsonProperty("month") int month,
-                    @JsonProperty("day") int day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
+                    @JsonProperty("day") int day,
+                    @JsonProperty("hour") int hour,
+                    @JsonProperty("minute") int minute,
+                    @JsonProperty("sec") int sec
+                    ) {
+        if (!isValid(year, month, day, hour, minute, sec)) {
+            this.year = 0;
+            this.month = 0;
+            this.day = 0;
+            this.hour = 0;
+            this.minute = 0;
+            this.sec = 0;
+        }
+         else {
+            this.year = year;
+            this.month = month;
+            this.day = day;
+            this.hour = hour;
+            this.minute = minute;
+            this.sec = sec;
+        }
     }
 
     /**
@@ -51,6 +93,30 @@ public class DateTime {
      */
     public int getDay() {
         return day;
+    }
+
+    /**
+     * Getter for hour
+     * @return
+     */
+    public int getHour() {
+        return hour;
+    }
+
+    /**
+     * getter for minute
+     * @return
+     */
+    public int getMinute() {
+        return minute;
+    }
+
+    /**
+     * getter for seconds
+     * @return
+     */
+    public int getSec() {
+        return sec;
     }
 
     /**
@@ -84,6 +150,18 @@ public class DateTime {
         if (this.day < 10) {
             stringBuilder.append("0");
         }
+//        // hour
+//        if (this.hour < 10) {
+//            stringBuilder.append("0");
+//        }
+//        // minute
+//        if (this.minute < 10) {
+//            stringBuilder.append("0");
+//        }
+//        // sec
+//        if (this.sec < 10) {
+//            stringBuilder.append("0");
+//        }
         stringBuilder.append(String.valueOf(this.day));
         return stringBuilder.toString();
     }
@@ -95,7 +173,7 @@ public class DateTime {
      * @param day - day
      * @return true the date is valid
      */
-    public static boolean isValid(int year, int month, int day) {
+    public static boolean isValid(int year, int month, int day, int hour, int minute, int sec) {
         /*
         * Check for valid ranges*/
 
@@ -111,6 +189,21 @@ public class DateTime {
 
         // check day
         if ((day < 1) || (day > 31)) {
+            return false;
+        }
+
+        // check hours
+        if (hour < 0 || hour > 24) {
+            return false;
+        }
+
+        // check minutes
+        if (minute < 0 || minute > 60) {
+            return false;
+        }
+
+        // check seconds
+        if (sec < 0 || sec > 60) {
             return false;
         }
 

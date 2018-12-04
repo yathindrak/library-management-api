@@ -141,21 +141,28 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
      * @return borrowed book as a Result
      */
     @Override
-    public Result borrowBook(String id, String date, String borrower) {
+    public Result borrowBook(String id, String date, String time, String borrower) {
         if(id == null || date == null || borrower == null){
             return badRequest(Response.generateResponse("Expecting required data", false));
         }
 
         String[] dateArr = date.split("-");
+        String[] timeArr = time.split(":");
 
         // find id by object id of the book
         Book book = bookRepo.findById(id);
 
         book.setBorrowedDate(new DateTime(Integer.parseInt(dateArr[0]),
-                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])));
+                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]),
+                Integer.parseInt(timeArr[0]), Integer.parseInt(timeArr[1]),
+                Integer.parseInt(timeArr[2])
+                ));
 
         DateTime dateTime = new DateTime(Integer.parseInt(dateArr[0]),
-                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]),
+                Integer.parseInt(timeArr[0]), Integer.parseInt(timeArr[1]),
+                Integer.parseInt(timeArr[2])
+        );
 
         Reader reader = null;
         try {
@@ -176,27 +183,36 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
 
     /**
      * Borrow a DVD
-     * @param id
-     * @param date
-     * @param borrower
+     * @param id - id
+     * @param date - date
+     * @param borrower - borrower
      * @return DVD borrowed
      */
     @Override
-    public Result borrowDvd(String id, String date, String borrower) {
+    public Result borrowDvd(String id, String date, String time, String borrower) {
         if(id == null || date == null || borrower == null){
             return badRequest(Response.generateResponse("Expecting required data", false));
         }
 
+        System.out.println(date);
+
         String[] dateArr = date.split("-");
+        String[] timeArr = time.split(":");
 
         // find id by object id of the book
         DVD dvd = dvdRepo.findById(id);
 
         dvd.setBorrowedDate(new DateTime(Integer.parseInt(dateArr[0]),
-                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2])));
+                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]),
+                Integer.parseInt(timeArr[0]), Integer.parseInt(timeArr[1]),
+                Integer.parseInt(timeArr[2])
+        ));
 
         DateTime dateTime = new DateTime(Integer.parseInt(dateArr[0]),
-                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]));
+                Integer.parseInt(dateArr[1]), Integer.parseInt(dateArr[2]),
+                Integer.parseInt(timeArr[0]), Integer.parseInt(timeArr[1]),
+                Integer.parseInt(timeArr[2])
+        );
 
         Reader reader = null;
         try {
@@ -218,7 +234,7 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
 
     /**
      * Return book
-     * @param id
+     * @param id - id
      * @return a result
      */
     @Override
