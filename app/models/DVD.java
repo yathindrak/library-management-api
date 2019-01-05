@@ -3,7 +3,6 @@ package models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.mongodb.morphia.annotations.Entity;
-import utils.DateTime;
 
 import java.util.List;
 
@@ -17,13 +16,14 @@ public class DVD extends Item {
     /*
     * This constructor for morphia get method*/
     public DVD() {
-        super(null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null);
         this.availLanguages = null;
         this.availSubtitles = null;
         this.producer = null;
         this.actors = null;
     }
 
+    // Json creater
     @JsonCreator
     public DVD(@JsonProperty("id") String id, @JsonProperty("isbn") String isbn,
                @JsonProperty("title") String title, @JsonProperty("sector") String sector,
@@ -33,8 +33,9 @@ public class DVD extends Item {
                @JsonProperty("availLanguages") List<String> availLanguages,
                @JsonProperty("availSubtitles") List<String> availSubtitles,
                @JsonProperty("producer") String producer,
-               @JsonProperty("actors")List<Actor> actors) {
-        super(id, isbn, title, sector, publicationDate, borrowedDate, currentReader);
+               @JsonProperty("actors")List<Actor> actors,
+               @JsonProperty("publisher")Publisher publisher) {
+        super(id, isbn, title, sector, publicationDate, borrowedDate, currentReader, publisher);
         this.availLanguages = availLanguages;
         this.availSubtitles = availSubtitles;
         this.producer = producer;

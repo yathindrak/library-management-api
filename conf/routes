@@ -27,6 +27,7 @@ POST    /returnBook/:id                  controllers.WestminsterLibraryManager.r
 POST    /returnDvd/:id                   controllers.WestminsterLibraryManager.returnDvd(id: String)
 
 GET     /reservations                    controllers.WestminsterLibraryManager.getAllReservations
+GET     /reservations/:isbn              controllers.WestminsterLibraryManager.getAllReservationsByIsbn(isbn: String)
 
 POST    /reservation                     controllers.WestminsterLibraryManager.saveReservation
 

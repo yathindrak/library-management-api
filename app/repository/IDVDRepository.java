@@ -8,7 +8,7 @@ import org.mongodb.morphia.Key;
 
 import java.util.List;
 import repository.implementation.DVDRepositoryImpl;
-import utils.DateTime;
+import models.DateTime;
 
 @ImplementedBy(DVDRepositoryImpl.class)
 public interface IDVDRepository {

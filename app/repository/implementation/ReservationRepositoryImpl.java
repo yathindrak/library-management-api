@@ -35,4 +35,10 @@ public class ReservationRepositoryImpl implements IReservationRepository {
         List<Reservation> reservations = Connection.getDatastore().createQuery(Reservation.class).asList();
         return reservations;
     }
+
+    @Override
+    public List<Reservation> findByIsbn(String isbn) {
+        List<Reservation> reservations = Connection.getDatastore().find(Reservation.class).filter("isbn", isbn).asList();
+        return reservations;
+    }
 }

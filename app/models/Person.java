@@ -8,11 +8,13 @@ public abstract class Person {
     private String _id;
     private String name;
 
+    // constructor
     public Person() {
         this._id = null;
         this.name = null;
     }
 
+    // Json creater
     @JsonCreator
     public Person(String id, String name) {
         this._id = id;

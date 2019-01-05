@@ -14,4 +14,6 @@ public interface IReservationRepository {
     Reservation findById(String id);
 
     List<Reservation> findAll();
+
+    List<Reservation> findByIsbn(String isbn);
 }

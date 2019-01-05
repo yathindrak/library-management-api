@@ -11,16 +11,20 @@ public class Reservation {
     private String id;
     private String isbn;
     private Reader reservedReader;
+    private int timeInHours;
 
+    // default constructor
     public Reservation() {
     }
 
+    // Json creater
     @JsonCreator
     public Reservation(@JsonProperty("id")String id, @JsonProperty("isbn") String isbn,
-                       @JsonProperty("reservedReader") Reader reservedReader) {
+                       @JsonProperty("reservedReader") Reader reservedReader, @JsonProperty("timeInHours") int timeInHours) {
         this.id = id;
         this.isbn = isbn;
         this.reservedReader = reservedReader;
+        this.timeInHours = timeInHours;
     }
 
     public String getId() {
@@ -45,5 +49,13 @@ public class Reservation {
 
     public void setReservedReader(Reader reservedReader) {
         this.reservedReader = reservedReader;
+    }
+
+    public int getTimeInHours() {
+        return timeInHours;
+    }
+
+    public void setTimeInHours(int timeInHours) {
+        this.timeInHours = timeInHours;
     }
 }

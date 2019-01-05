@@ -10,12 +10,14 @@ public class Reader extends Person{
     private String mobile;
     private String email;
 
+    // constructor
     public Reader() {
         super(null, null);
         this.mobile = null;
         this.email = null;
     }
 
+    // Json creater
     @JsonCreator
     public Reader(@JsonProperty("id") String id,@JsonProperty("name") String name,
                   @JsonProperty("mobile") String mobile, @JsonProperty("email") String email) {

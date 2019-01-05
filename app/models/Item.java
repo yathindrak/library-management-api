@@ -1,7 +1,6 @@
 package models;
 
 import org.mongodb.morphia.annotations.Id;
-import utils.DateTime;
 
 public abstract class Item {
     @Id
@@ -12,21 +11,11 @@ public abstract class Item {
     private DateTime publicationDate;
     private DateTime borrowedDate;
     private Reader currentReader;
+    private Publisher publisher;
 
-
-//    @JsonCreator
-//    public Item() {
-//        this.id = null;
-//        this.isbn = null;
-//        this.title = null;
-//        this.sector = null;
-//        this.publicationDate = null;
-//        this.borrowedDate = null;
-//        this.currentReader = null;
-//    }
-
+    // constructor
     public Item(String id, String isbn, String title, String sector, DateTime publicationDate,
-                DateTime borrowedDate, Reader currentReader) {
+                DateTime borrowedDate, Reader currentReader,Publisher publisher) {
         this.id = id;
         this.isbn = isbn;
         this.title = title;
@@ -34,6 +23,7 @@ public abstract class Item {
         this.publicationDate = publicationDate;
         this.borrowedDate = borrowedDate;
         this.currentReader = currentReader;
+        this.publisher = publisher;
     }
 
     public String getId() {
@@ -90,5 +80,13 @@ public abstract class Item {
 
     public void setCurrentReader(Reader currentReader) {
         this.currentReader = currentReader;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 }

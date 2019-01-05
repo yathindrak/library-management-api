@@ -18,5 +18,6 @@ public interface LibraryManager {
     Result getAllMembers();
     Result saveMember();
     Result getAllReservations();
+    Result getAllReservationsByIsbn(String isbn);
     Result saveReservation();
 }

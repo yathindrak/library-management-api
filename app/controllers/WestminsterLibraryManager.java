@@ -11,7 +11,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import repository.*;
 import play.libs.Json;
-import utils.DateTime;
+import models.DateTime;
 import utils.Response;
 
 import java.util.ArrayList;
@@ -39,6 +39,9 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
 
     @Inject
     private IReservationRepository reservationRepo;
+
+    @Inject
+    private IPublisherRepository publisherRepo;
 
     private HttpExecutionContext httpExecutionContext;
 
@@ -94,6 +97,8 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
             return badRequest(Response.generateResponse(e.getMessage(), false));
         }
 
+        publisherRepo.save(deserializedDVD.getPublisher());
+
         Logger.info("success saving dvd");
         return ok("success saving dvd");
     }
@@ -129,6 +134,8 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         }
         if (returned.getId() != null)
             Logger.info("success saving book");
+
+        publisherRepo.save(deserializedBook.getPublisher());
 
         return ok(String.valueOf("success saving book"));
     }
@@ -351,6 +358,20 @@ public class WestminsterLibraryManager extends Controller implements LibraryMana
         List<Reservation> reservations = reservationRepo.findAll();
         if (reservations != null)
             Logger.info("Got all reservations");
+
+        return ok(Json.toJson(reservations));
+    }
+
+    /**
+     * Get all reservations by isbn
+     * @param isbn - isbn
+     * @return List<Reservation>
+     */
+    @Override
+    public Result getAllReservationsByIsbn(String isbn) {
+        List<Reservation> reservations = reservationRepo.findByIsbn(isbn);
+        if (reservations != null)
+            Logger.info("Got all reservations by isbn" + isbn);
 
         return ok(Json.toJson(reservations));
     }
