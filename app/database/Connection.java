@@ -48,7 +48,7 @@ public class Connection {
             String mongo_username = ConfigFactory.load().getString("mongo_username");
             String mongo_pwd = ConfigFactory.load().getString("mongo_pwd");
             String mongo_db = ConfigFactory.load().getString("mongo_db");
-            MongoClientURI uri = new MongoClientURI("mongodb://"+mongo_username+":"+mongo_pwd+"@ds137913.mlab.com:37913/"+mongo_db, options);
+            MongoClientURI uri = new MongoClientURI("mongodb://"+mongo_username+":"+mongo_pwd+"DB_DOMAIN_AND_PORT_SHOULD_COMES_HERE"+mongo_db, options);
 
             // init the data store
             datastore = morphia.createDatastore(new MongoClient(uri), mongo_db);
